@@ -5,6 +5,6 @@ from .views import *
 
 
 urlpatterns = [
-    path('createorang', create_orang),
-    path('sendorang', send_orang)
+    path('test', test),
+
 ]
