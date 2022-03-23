@@ -18,5 +18,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('case3/', include('case3.urls', namespace='case3_ns'))
+    path('case3/', include('case3.urls', namespace='case3_ns')),
+    path('web/', include('web.urls', namespace='web_ns')),
+    path('api/', include('api.urls', namespace='api_ns')),
+    path('authentication/', include('authentication.urls', namespace='authentication_ns'))
 ]
