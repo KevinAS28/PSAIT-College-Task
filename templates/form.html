@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+    closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">Form nilai</div>
+    <form id="fm" method="post" novalidate>
+        <div class="fitem">
+            <label>Kode mk:</label>
+            <input name="kode_mk" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>Nilai:</label>
+            <input name="nilai" class="easyui-textbox" required="true">
+        </div>
+    </form>
+    </div>
+    <div id="dlg-buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</body>
+</html>

@@ -52,9 +52,9 @@ def orang_page(request: WSGIRequest):
     return render(request, 'orang.html', {'orangs': orangs['orang']})
 
 
-def sentiment_analysis(request: WSGIRequest):
+def entity_extraction(request: WSGIRequest):
     if request.method == 'GET':
-        return render(request, 'sentiment_analysis.html')
+        return render(request, 'entity_extraction.html')
     elif request.method == 'POST':
         key = ENV_VARS['GCP_API_KEY']
         data = {
@@ -69,4 +69,11 @@ def sentiment_analysis(request: WSGIRequest):
         print(resp.text)
         entities = json.loads(resp.text)['entities']
         all_entities = [{e['type']:e['name']} for e in entities]
-        return render(request, 'sentiment_analysis.html', {'all_entities':all_entities})
+        return render(request, 'entity_extraction.html', {'all_entities':all_entities})
+
+def table(request):
+    return render(request, 'table.html')
+
+def form(request):
+    return render(request, 'form.html')
+
