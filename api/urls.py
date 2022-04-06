@@ -11,5 +11,6 @@ urlpatterns = [
     path('delete_orang', delete_orang),
     path('test_perkuliahan', test_perkuliahan),
     path('show_nilai_mahasiswa', show_nilai_mahasiswa),
-    path('nilai', nilai)
+    path('nilai', nilai),
+    path('nilai_raw_query', nilai_raw_query)
 ]

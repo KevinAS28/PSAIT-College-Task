@@ -5,6 +5,8 @@ from django.forms import model_to_dict
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.db import connection
+
 from sympy import per
 
 from authentication.auth_core import token_auth
@@ -109,6 +111,24 @@ def show_nilai_mahasiswa(request:WSGIRequest):
         return JsonResponse({'nilai': [model_to_dict(o) for o in list(Perkuliahan.objects.all())]})
     get_nilai_mk = lambda o: {'mk': MataKuliah.objects.get(kode_mk=o['kode_mk']).nama_mk, 'nilai': o['nilai']}
     return JsonResponse({'nilai': [get_nilai_mk(model_to_dict(o)) for o in Perkuliahan.objects.filter(nim__nim=nim)]})
+
+
+def nilai_raw_query(request):
+    with connection.cursor() as cursor:
+        cursor.execute('''SELECT api_perkuliahan.nim_id, api_mahasiswa.nama, api_mahasiswa.alamat,  api_mahasiswa.tanggal_lahir, api_matakuliah.kode_mk, api_matakuliah.nama_mk, api_matakuliah.sks, api_perkuliahan.nilai FROM api_perkuliahan JOIN api_mahasiswa  ON api_mahasiswa.nim=api_perkuliahan.nim_id JOIN api_matakuliah  ON api_matakuliah.kode_mk=api_perkuliahan.kode_mk_id;''')
+        columns = [col[0] for col in cursor.description]
+        return JsonResponse({'nilai': [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]})
+
+def my_custom_sql(self):
+    with connection.cursor() as cursor:
+        cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
+        cursor.execute("SELECT foo FROM bar WHERE baz = %s", [self.baz])
+        row = cursor.fetchone()
+
+    return row
 
 @require_http_methods(['POST', 'PATCH', 'DELETE'])
 def nilai(request:WSGIRequest):

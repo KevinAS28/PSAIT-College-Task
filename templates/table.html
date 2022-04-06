@@ -13,7 +13,11 @@
 <body>
     <table border='1'>
         <tr>
-            <th>ID Perkuliahan</th>
+            <th>Nama</th>
+            <th>Alamat</th>
+            <th>Tanggal lahir</th>
+            <th>Nama MK</th>
+            <th>SKS</th>
             <th>NIM</th>
             <th>Kode MK</th>
             <th>Nilai</th>
@@ -24,7 +28,7 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: "http://172.23.164.56:8000/api/show_nilai_mahasiswa",
+            url: "http://172.23.164.56:8000/api/nilai_raw_query",
             dataType: 'json',
             success: function (resp) {
                 console.log(resp);
@@ -35,9 +39,17 @@
                     console.log(nilai);
                     trHTML +=
                         '<tr><td>' +
-                        nilai[j].id_perkuliahan +
+                        nilai[j].nama +
                         '</td><td>' +
-                        nilai[j].nim +
+                        nilai[j].alamat +
+                        '</td><td>' +
+                        nilai[j].tanggal_lahir +
+                        '</td><td>' +
+                        nilai[j].nama_mk +
+                        '</td><td>' +
+                        nilai[j].sks +
+                        '</td><td>' +
+                        nilai[j].nim_id +
                         '</td><td>' +
                         nilai[j].kode_mk +
                         '</td><td>' +
