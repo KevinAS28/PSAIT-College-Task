@@ -1,10 +1,8 @@
 from datetime import datetime
-from django.shortcuts import render
 import json
 from django.http import JsonResponse
 import authentication.models as models
 from django.forms.models import model_to_dict
-from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 import authentication.auth_util as auth_util
 

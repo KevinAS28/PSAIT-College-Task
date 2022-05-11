@@ -2,11 +2,13 @@ import json
 import traceback
 import requests
 
+from case3 import models as case3_models
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.core.handlers.wsgi import WSGIRequest
 from django.conf import settings
-
+from django.views.decorators.http import require_http_methods
 # Create your views here.
 
 ENV_VARS = settings.ENV_VARS
@@ -69,11 +71,46 @@ def entity_extraction(request: WSGIRequest):
         print(resp.text)
         entities = json.loads(resp.text)['entities']
         all_entities = [{e['type']:e['name']} for e in entities]
-        return render(request, 'entity_extraction.html', {'all_entities':all_entities})
+        return render(request, 'entity_extraction.html', {'all_entities': all_entities})
+
 
 def table(request):
     return render(request, 'table.html')
 
+
 def form(request):
     return render(request, 'form.html')
 
+
+@require_http_methods(['GET', 'POST'])
+def form_multi_db(request: WSGIRequest):
+    saved = False
+    response = None
+    response_status = None
+
+    if request.method == 'POST':
+        try:
+            response = requests.post(settings.BACKUP_DB_API, data=json.dumps({
+                "action": "CREATE",
+                "tables": [
+                    {
+                        "app_label": "case3",
+                        "model_name": "Orang",
+                        "to_creates": [
+                            {key:value[0] for key, value in dict(request.POST).items()}
+                        ]
+                    }
+                ]
+            }))
+            orang = case3_models.Orang(
+                nama=request.POST['nama'], umur=request.POST['umur'])
+            orang.save()
+            response_status = True
+        except:
+            response = traceback.format_exc()
+            print('Error', response)
+            response_status = False
+
+        saved = True
+
+    return render(request, 'form_multi_db.html', {'saved': saved, 'response': response, 'response_status': response_status})

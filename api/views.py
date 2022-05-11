@@ -6,6 +6,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.db import connection
+from django.apps import apps
 
 from sympy import per
 
@@ -171,3 +172,14 @@ def nilai(request:WSGIRequest):
         perkuliahan = Perkuliahan.objects.get(kode_mk=mk, nim=mahasiswa)
         perkuliahan.delete()
         return JsonResponse({'deleted': model_to_dict(perkuliahan)})
+
+@require_http_methods(['POST'])
+def backup_db(request: WSGIRequest):
+    data = json.loads(request.body)
+    print('data', data)
+    if data['action']=='CREATE':
+        for table in data['tables']:
+            table_model = apps.get_model(app_label=table['app_label'], model_name=table['model_name'])
+            for to_create in table['to_creates']:
+                table_model(**to_create).save() 
+    return JsonResponse({'OK': 'OK'})

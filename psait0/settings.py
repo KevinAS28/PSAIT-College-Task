@@ -89,7 +89,7 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sait_db_uts',
+        'NAME': 'psait',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
@@ -144,5 +144,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+BACKUP_DB_API = 'http://172.23.25.227:8080/api/backup_db'
 
 TOKEN_AUTHENTICATION_CONFIG = TOKEN_AUTHENTICATION_CONFIG

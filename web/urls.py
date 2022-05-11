@@ -10,4 +10,5 @@ urlpatterns = [
     path('entity_extraction', entity_extraction),
     path('table', table),
     path('form', form),
+    path('form_multi_db', form_multi_db)
 ]
