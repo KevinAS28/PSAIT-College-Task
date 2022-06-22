@@ -10,7 +10,7 @@ from django.apps import apps
 
 from sympy import per
 
-from authentication.auth_core import token_auth
+from token_authentication.auth_core import token_auth
 from api.models import *
 
 # Create your views here.
