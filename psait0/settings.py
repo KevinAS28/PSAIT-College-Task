@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'authentication',
     'case3',
     'web',
-    'api'
+    'api',
+    'services'
 ]
 
 MIDDLEWARE = [
@@ -146,6 +147,8 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-BACKUP_DB_API = 'http://172.23.16.1:8082/api/backup_db'
+BACKUP_DB_API = 'http://172.29.80.1:8082/api/backup_db'
+
+
 
 TOKEN_AUTHENTICATION_CONFIG = TOKEN_AUTHENTICATION_CONFIG

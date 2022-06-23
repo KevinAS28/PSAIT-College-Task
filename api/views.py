@@ -18,7 +18,7 @@ from api.models import *
 @token_auth(roles=['*'])
 @require_http_methods(['GET'])
 def get_orang(request:WSGIRequest):
-    return {'orang': [model_to_dict(i) for i in models.Orang.objects.all()]}
+    return {'orang': [model_to_dict(i) for i in Orang.objects.all()]}
 
 @require_http_methods(['PUT'])
 @token_auth(roles=['*'])
@@ -26,7 +26,7 @@ def update_orang(request:WSGIRequest):
     try:
         data = json.loads(request.body)
         idorang, nama, umur = data['id'], data['nama'], data['umur']
-        orang = models.Orang.objects.get(id=idorang)
+        orang = Orang.objects.get(id=idorang)
         orang.nama = nama
         orang.umur = umur
         orang.save()
@@ -51,7 +51,7 @@ def delete_orang(request:WSGIRequest):
     
     try:
         data = json.loads(request.body)
-        orang = models.Orang.objects.get(nama=data['nama'], umur=data['umur'])
+        orang = Orang.objects.get(nama=data['nama'], umur=data['umur'])
         orang.delete()
         response = {
             'deleted_models': model_to_dict(orang),
@@ -75,7 +75,7 @@ def create_orang(request:WSGIRequest):
     
     try:
         data = json.loads(request.body)
-        orang = models.Orang(nama=data['nama'], umur=data['umur'])
+        orang = Orang(nama=data['nama'], umur=data['umur'])
         orang.save()
         response = {
             'saved_models': model_to_dict(orang),
@@ -183,3 +183,19 @@ def backup_db(request: WSGIRequest):
             for to_create in table['to_creates']:
                 table_model(**to_create).save() 
     return JsonResponse({'OK': 'OK'})
+
+@require_http_methods(['PUT'])
+# @token_auth(roles=['*'])
+def tg_gcp_permission(request: WSGIRequest):
+    data = json.loads(request.body)
+    username_access = data['username_access']
+    print(username_access)
+    users = TgGcpAccess.objects.filter(tg_username__in=list(username_access.keys()))
+    for u in users:
+        u.access = username_access[u.tg_username]
+        u.save()
+        del username_access[u.tg_username]
+    for user, access in username_access.items():
+        TgGcpAccess(tg_username=user, access=access).save()
+    return JsonResponse({'success': True, 'username_access': [{'username': i.tg_username, 'access': i.access} for i in TgGcpAccess.objects.all()]})
+

@@ -2,3 +2,4 @@ Django
 mysqlclient
 sympy
 requests
+google-cloud-compute

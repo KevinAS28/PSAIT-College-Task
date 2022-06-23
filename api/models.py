@@ -18,3 +18,10 @@ class Perkuliahan(models.Model):
     kode_mk = models.ForeignKey(MataKuliah, to_field='kode_mk', on_delete=models.CASCADE) # foreign key ke kode_mk pada mata kuliah
     nilai = models.FloatField() #Di python tidak ada double, hanya ada integer dan float
 
+class Orang(models.Model):
+    nama = models.CharField(max_length=50)
+    umur = models.IntegerField()
+
+class TgGcpAccess(models.Model):
+    tg_username = models.CharField(max_length=50)
+    access = models.BooleanField()
