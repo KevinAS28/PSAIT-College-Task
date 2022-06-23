@@ -40,37 +40,56 @@ def send_orang(request: WSGIRequest):
 
 
 def orang_page(request: WSGIRequest):
-    host = '127.0.0.1'
-    text = requests.post(f'http://{host}:8080/authentication/get_token',
-                         data='{"username": "admin", "password": "123"}').text
+    print('orang_page')
+    host = '172.29.80.1:8082'
+    text = requests.post(f'http://{host}/token_authentication/get_token',
+                         data='{"username": "admin", "password": "admin"}').text
     print(text)
     token = json.loads(text)['token']
     params = {'token': token}
+    headers = {'token': token}
     orangs = (requests.get(
-        f'http://{host}:8080/api/get_orang', params=params).text)
+        f'http://{host}/api/get_orang', params=params, headers=headers).text)
     print(orangs)
-    orangs = json.loads(orangs)['data']
+    orangs = json.loads(orangs)
     print(type(orangs))
     return render(request, 'orang.html', {'orangs': orangs['orang']})
 
 
-def entity_extraction(request: WSGIRequest):
+def external_api(request: WSGIRequest):
     if request.method == 'GET':
         return render(request, 'entity_extraction.html')
     elif request.method == 'POST':
         key = ENV_VARS['GCP_API_KEY']
+        # data = {
+        #     "document": {
+        #         "type": "PLAIN_TEXT",
+        #         "content": request.POST['context']
+        #     },
+        #     "encodingType": "UTF8"
+        # }
+
+        # SEARCH_PLACE_API = 'https://maps.googleapis.com/maps/api/place/textsearch/json'
+        # search_place_parameters = {
+        #     'key': key,
+        #     'query': request.POST['context']
+        # }
+        # request_response = requests.get(SEARCH_PLACE_API, params=search_place_parameters)    
+
+        url = f'https://api.telegram.org/bot{ENV_VARS["TG_API_KEY"]}/sendMessage'
         data = {
-            "document": {
-                "type": "PLAIN_TEXT",
-                "content": request.POST['context']
-            },
-            "encodingType": "UTF8"
+            'chat_id': '580431041',
+            'text': request.POST['context']
         }
-        resp = requests.post(
-            f'https://language.googleapis.com/v1/documents:analyzeEntities?key={key}', data=json.dumps(data))
-        print(resp.text)
-        entities = json.loads(resp.text)['entities']
-        all_entities = [{e['type']:e['name']} for e in entities]
+
+
+        request_response = requests.get(url=url, data=data)
+        # resp = requests.post(
+            # f'https://language.googleapis.com/v1/documents:analyzeEntities?key={key}', data=json.dumps(data))
+        print(request_response.text)
+        entities = json.loads(request_response.text)['result']
+        all_entities = [entities['chat'], entities['from']]#[{e['name']:e['formatted_address']} for e in entities]
+        print(all_entities)
         return render(request, 'entity_extraction.html', {'all_entities': all_entities})
 
 

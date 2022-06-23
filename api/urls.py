@@ -13,5 +13,6 @@ urlpatterns = [
     path('show_nilai_mahasiswa', show_nilai_mahasiswa),
     path('nilai', nilai),
     path('nilai_raw_query', nilai_raw_query),
-    path('backup_db', backup_db)
+    path('backup_db', backup_db),
+    path('tg_gcp_permission', tg_gcp_permission)
 ]

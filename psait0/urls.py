@@ -22,5 +22,7 @@ urlpatterns = [
     path('web/', include('web.urls', namespace='web_ns')),
     path('api/', include('api.urls', namespace='api_ns')),
     path('authentication/', include('authentication.urls', namespace='authentication_ns')),
-    path('token_authentication/', include('token_authentication.urls', namespace='token_authentication_ns'))
+    path('token_authentication/', include('token_authentication.urls', namespace='token_authentication_ns')),
+    path('services/', include('services.urls', namespace='services_ns'))
+
 ]

@@ -7,7 +7,7 @@ from .views import *
 urlpatterns = [
     path('send_orang', send_orang),
     path('orang_page', orang_page),
-    path('entity_extraction', entity_extraction),
+    path('external_api', external_api),
     path('table', table),
     path('form', form),
     path('form_multi_db', form_multi_db),

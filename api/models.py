@@ -21,3 +21,9 @@ class Perkuliahan(models.Model):
 class Orang(models.Model):
     nama = models.CharField(max_length=50)
     umur = models.IntegerField()
+
+
+class TgGcpAccess(models.Model):
+    tg_username = models.CharField(max_length=50)
+    access = models.BooleanField()
+
