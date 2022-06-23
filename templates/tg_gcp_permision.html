@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TG GCP Permission</title>
+</head>
+<body>
+    <b>{{msg}}</b>
+    <form method="post">
+        <input type="hidden" name="type_post" value="new">
+        <input type="text" name="new_username" id="new_username" placeholder="USERNAME"/><br>
+
+        <input type="radio" id="new_1" name="new_access" value="1">
+        <label for="new_1">Granted</label><br>
+
+        <input type="radio" id="new_0" name="new_access" value="0">
+        <label for="new_0">Denied</label><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <br><br>
+    
+    <form action="" method="POST">
+        <input type="hidden" name="type_post" value="put">
+        <input type="submit" value="Update">
+        <table border="3">
+            <tr>
+                <td><b>Username</b></td>
+                <td><b>Access</b></td>
+                <td><b>Switch</b></td>
+            </tr>
+            {% for ua in username_access %}
+                <tr>
+                
+                    <td>{{ua.username}}</td>
+                    <td>{{ua.access}}</td>
+                    <td>
+                        <input type="checkbox" id="switch_{{ua.username}}" name="switch_{{ua.username}}" value="switch_{{ua.username}}">
+
+                </td>
+                
+                
+                </tr>
+                {% endfor %}
+        </table>
+    </form>
+</body>
+</html>

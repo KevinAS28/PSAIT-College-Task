@@ -10,5 +10,6 @@ urlpatterns = [
     path('entity_extraction', entity_extraction),
     path('table', table),
     path('form', form),
-    path('form_multi_db', form_multi_db)
+    path('form_multi_db', form_multi_db),
+    path('tg_gcp_permission', tg_gcp_compute)
 ]

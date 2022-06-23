@@ -114,3 +114,34 @@ def form_multi_db(request: WSGIRequest):
         saved = True
 
     return render(request, 'form_multi_db.html', {'saved': saved, 'response': response, 'response_status': response_status})
+
+def tg_gcp_compute(request: WSGIRequest):
+    message = 'No Message'
+    URL = 'http://172.29.82.245:9999/api/tg_gcp_permission'
+    username_access = dict()
+    if request.method=='POST':
+        if request.POST['type_post']=='new':
+            post = dict(request.POST)
+            username_access[post['new_username'][0]] = bool(post['new_access'][0])
+        else:
+            username_to_switches = [i.lstrip('switch_') for i in dict(request.POST) if i.startswith('switch_')]
+            message = str(username_to_switches)
+            
+            response = requests.put(URL, data=json.dumps({'username_access': username_access})).text
+            response = json.loads(response)
+            username_access = response['username_access']
+            
+            new_username_access = {ua['username']: not ua['access'] for ua in username_access if ua['username'] in username_to_switches}
+            response = requests.put(URL, data=json.dumps({'username_access': new_username_access})).text
+            response = json.loads(response)
+            username_access = dict()
+
+
+    response = requests.put(URL, data=json.dumps({'username_access': username_access})).text
+    response = json.loads(response)
+    username_access = response['username_access']
+    
+
+    body = {'msg': message, 'username_access': username_access}
+
+    return render(request, 'tg_gcp_permision.html', body)

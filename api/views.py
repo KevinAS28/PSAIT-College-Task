@@ -18,7 +18,7 @@ from api.models import *
 @token_auth(roles=['*'])
 @require_http_methods(['GET'])
 def get_orang(request:WSGIRequest):
-    return {'orang': [model_to_dict(i) for i in models.Orang.objects.all()]}
+    return JsonResponse({'orang': [model_to_dict(i) for i in Orang.objects.all()]})
 
 @require_http_methods(['PUT'])
 @token_auth(roles=['*'])
@@ -26,7 +26,7 @@ def update_orang(request:WSGIRequest):
     try:
         data = json.loads(request.body)
         idorang, nama, umur = data['id'], data['nama'], data['umur']
-        orang = models.Orang.objects.get(id=idorang)
+        orang = Orang.objects.get(id=idorang)
         orang.nama = nama
         orang.umur = umur
         orang.save()
@@ -51,7 +51,7 @@ def delete_orang(request:WSGIRequest):
     
     try:
         data = json.loads(request.body)
-        orang = models.Orang.objects.get(nama=data['nama'], umur=data['umur'])
+        orang = Orang.objects.get(nama=data['nama'], umur=data['umur'])
         orang.delete()
         response = {
             'deleted_models': model_to_dict(orang),
@@ -70,28 +70,28 @@ def delete_orang(request:WSGIRequest):
         return (error_data)
 
 @require_http_methods(['POST'])
-@token_auth(roles=['*'])
+# @token_auth(roles=['*'])
 def create_orang(request:WSGIRequest):
     
     try:
         data = json.loads(request.body)
-        orang = models.Orang(nama=data['nama'], umur=data['umur'])
+        orang = Orang(nama=data['nama'], umur=data['umur'])
         orang.save()
         response = {
             'saved_models': model_to_dict(orang),
             'status':0,
             'status_str':'success'
         }
-        return response
+        return JsonResponse(response)
     except Exception as error:
-        error_data = {
+        response = {
             'error_brief': str(error),
             'error_long': str(traceback.format_exc()),
             'status': 1,
             'status_str': 'Error'
         }
 
-        return response
+        return JsonResponse(response)
 
 def test_perkuliahan(request:WSGIRequest):
     perkuliahan = Perkuliahan.objects.all().select_related('nim', 'kode_mk')
